@@ -7,6 +7,15 @@ import static org.mockito.Mockito.when;
 
 public class SubmitPaymentShould {
 
+    @Test
+    public void works_when_everything_is_correct() throws EmptyShoppingCartException {
+        SubmitPayment submitPayment = new SubmitPayment();
+        ShoppingBasket shoppingBasket = mock(ShoppingBasket.class);
+        when(shoppingBasket.items()).thenReturn(Arrays.asList(new Item()));
+
+        submitPayment.execute(shoppingBasket);
+    }
+
     @Test(expected = EmptyShoppingCartException.class)
     public void avoid_make_a_payment_of_an_empty_shopping_basket() throws EmptyShoppingCartException {
         SubmitPayment submitPayment = new SubmitPayment();
