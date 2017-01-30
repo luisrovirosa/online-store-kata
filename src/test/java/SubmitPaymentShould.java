@@ -21,7 +21,7 @@ public class SubmitPaymentShould {
     }
 
     @Test
-    public void works_when_everything_is_correct() throws EmptyShoppingCartException {
+    public void works_when_everything_is_correct() throws EmptyShoppingCartException, OutOfStockException {
         Item item = anItem();
         ShoppingBasket shoppingBasket = shoppingBasketWith(item);
         when(stockValidator.hasStock(item)).thenReturn(true);
@@ -30,18 +30,17 @@ public class SubmitPaymentShould {
     }
 
     @Test(expected = EmptyShoppingCartException.class)
-    public void avoid_make_a_payment_of_an_empty_shopping_basket() throws EmptyShoppingCartException {
+    public void avoid_make_a_payment_of_an_empty_shopping_basket() throws EmptyShoppingCartException, OutOfStockException {
         submitPayment.execute(emptyShoppingBasket());
     }
 
-    @Test
-    public void check_that_all_the_items_are_in_stock() throws EmptyShoppingCartException {
+    @Test(expected = OutOfStockException.class)
+    public void abort_payment_when_there_is_an_item_out_of_stock() throws EmptyShoppingCartException, OutOfStockException {
         Item item = anItem();
         ShoppingBasket shoppingBasket = shoppingBasketWith(item);
+        when(stockValidator.hasStock(item)).thenReturn(false);
 
         submitPayment.execute(shoppingBasket);
-
-        verify(stockValidator).hasStock(item);
     }
 
     // abort_payment_when_there_is_an_item_out_of_stock
