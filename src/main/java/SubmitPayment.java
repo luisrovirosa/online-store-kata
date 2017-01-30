@@ -11,13 +11,24 @@ public class SubmitPayment {
     }
 
     public void execute(ShoppingBasket shoppingBasket) throws EmptyShoppingCartException, OutOfStockException {
-        List<Item> items = shoppingBasket.items();
-        if (items.size() == 0){
+        assertHasItems(shoppingBasket);
+        assertHasStock(shoppingBasket);
+        pay(shoppingBasket);
+    }
+
+    private void assertHasItems(ShoppingBasket shoppingBasket) throws EmptyShoppingCartException {
+        if (shoppingBasket.items().size() == 0){
             throw new EmptyShoppingCartException();
         }
-        if (items.stream().filter((Item item) -> !stockValidator.hasStock(item)).count() > 0){
+    }
+
+    private void assertHasStock(ShoppingBasket shoppingBasket) throws OutOfStockException {
+        if (shoppingBasket.items().stream().filter((Item item) -> !stockValidator.hasStock(item)).count() > 0){
             throw new OutOfStockException();
         }
+    }
+
+    private void pay(ShoppingBasket shoppingBasket) {
         paymentGateway.pay(shoppingBasket);
     }
 }
