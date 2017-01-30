@@ -4,16 +4,19 @@ import java.util.stream.Stream;
 public class SubmitPayment {
     private final StockValidator stockValidator;
     private final PaymentGateway paymentGateway;
+    private final Mailer mailer;
 
-    public SubmitPayment(StockValidator stockValidator, PaymentGateway paymentGateway) {
+    public SubmitPayment(StockValidator stockValidator, PaymentGateway paymentGateway, Mailer mailer) {
         this.stockValidator = stockValidator;
         this.paymentGateway = paymentGateway;
+        this.mailer = mailer;
     }
 
     public void execute(ShoppingBasket shoppingBasket) throws EmptyShoppingCartException, OutOfStockException {
         assertHasItems(shoppingBasket);
         assertHasStock(shoppingBasket);
         pay(shoppingBasket);
+        mailer.sendConfirmationEmail(shoppingBasket);
     }
 
     private void assertHasItems(ShoppingBasket shoppingBasket) throws EmptyShoppingCartException {

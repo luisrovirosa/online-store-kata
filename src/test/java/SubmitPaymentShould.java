@@ -13,12 +13,14 @@ public class SubmitPaymentShould {
     private StockValidator stockValidator;
     private SubmitPayment submitPayment;
     private PaymentGateway paymentGateway;
+    private Mailer mailer;
 
     @Before
     public void setUp(){
         stockValidator = mock(StockValidator.class);
         paymentGateway = mock(PaymentGateway.class);
-        submitPayment = new SubmitPayment(stockValidator, paymentGateway);
+        mailer = mock(Mailer.class);
+        submitPayment = new SubmitPayment(stockValidator, paymentGateway, mailer);
     }
 
     @Test
@@ -50,7 +52,14 @@ public class SubmitPaymentShould {
         verify(paymentGateway).pay(shoppingBasket);
     }
 
-    // send_an_email_when_the_payment_is_successful
+    @Test
+    public void send_an_email_when_the_payment_is_successful() throws Exception{
+        ShoppingBasket shoppingBasket = validShoppingBasket();
+
+        submitPayment.execute(shoppingBasket);
+
+        verify(mailer).sendConfirmationEmail(shoppingBasket);
+    }
 
     // returns_ok_when_everything_went_well
     // returns_fail_with_the_message_when_there_is_a_problem
