@@ -16,7 +16,7 @@ public class SubmitPayment {
         assertHasItems(shoppingBasket);
         assertHasStock(shoppingBasket);
         pay(shoppingBasket);
-        mailer.sendConfirmationEmail(shoppingBasket);
+        sendConfirmationEmail(shoppingBasket);
     }
 
     private void assertHasItems(ShoppingBasket shoppingBasket) throws EmptyShoppingCartException {
@@ -36,5 +36,9 @@ public class SubmitPayment {
 
     private void pay(ShoppingBasket shoppingBasket) {
         paymentGateway.pay(shoppingBasket);
+    }
+
+    private void sendConfirmationEmail(ShoppingBasket shoppingBasket) {
+        mailer.sendConfirmationEmail(shoppingBasket);
     }
 }
