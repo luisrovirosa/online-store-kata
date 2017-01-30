@@ -3,6 +3,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -21,25 +22,21 @@ public class SubmitPaymentShould {
 
     @Test
     public void works_when_everything_is_correct() throws EmptyShoppingCartException {
-        ShoppingBasket shoppingBasket = mock(ShoppingBasket.class);
-        when(shoppingBasket.items()).thenReturn(Collections.singletonList(new Item()));
+        ShoppingBasket shoppingBasket = shoppingBasketWith(Collections.singletonList(new Item()));
 
         submitPayment.execute(shoppingBasket);
     }
 
     @Test(expected = EmptyShoppingCartException.class)
     public void avoid_make_a_payment_of_an_empty_shopping_basket() throws EmptyShoppingCartException {
-        ShoppingBasket shoppingBasket = mock(ShoppingBasket.class);
-        when(shoppingBasket.items()).thenReturn(Collections.emptyList());
-
-        submitPayment.execute(shoppingBasket);
+        submitPayment.execute(emptyShoppingBasket());
     }
+
 
     @Test
     public void check_that_all_the_items_are_in_stock() throws EmptyShoppingCartException {
-        ShoppingBasket shoppingBasket = mock(ShoppingBasket.class);
         Item anItem = new Item();
-        when(shoppingBasket.items()).thenReturn(Collections.singletonList(anItem));
+        ShoppingBasket shoppingBasket = shoppingBasketWith(Collections.singletonList(anItem));
 
         submitPayment.execute(shoppingBasket);
 
@@ -47,10 +44,20 @@ public class SubmitPaymentShould {
     }
 
     // abort_payment_when_there_is_an_item_out_of_stock
-    // make_the_payment_against_the_payment_gateway
-    // send_an_email_when_the_payment_is_successful
-
     // returns_ok_when_everything_went_well
+
     // returns_fail_with_the_message_when_there_is_a_problem
+    // send_an_email_when_the_payment_is_successful
+    // make_the_payment_against_the_payment_gateway
+
+    private ShoppingBasket emptyShoppingBasket() {
+        return shoppingBasketWith(Collections.emptyList());
+    }
+
+    private ShoppingBasket shoppingBasketWith(List<Item> t) {
+        ShoppingBasket shoppingBasket = mock(ShoppingBasket.class);
+        when(shoppingBasket.items()).thenReturn(t);
+        return shoppingBasket;
+    }
 
 }
