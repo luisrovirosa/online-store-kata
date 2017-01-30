@@ -12,11 +12,13 @@ public class SubmitPaymentShould {
 
     private StockValidator stockValidator;
     private SubmitPayment submitPayment;
+    private PaymentGateway paymentGateway;
 
     @Before
     public void setUp(){
         stockValidator = mock(StockValidator.class);
-        submitPayment = new SubmitPayment(stockValidator);
+        paymentGateway = mock(PaymentGateway.class);
+        submitPayment = new SubmitPayment(stockValidator, paymentGateway);
     }
 
     @Test
@@ -39,7 +41,15 @@ public class SubmitPaymentShould {
         submitPayment.execute(shoppingBasket);
     }
 
-    // make_the_payment_against_the_payment_gateway
+    @Test
+    public void make_the_payment_against_the_payment_gateway() throws Exception {
+        ShoppingBasket shoppingBasket = validShoppingBasket();
+
+        submitPayment.execute(shoppingBasket);
+
+        verify(paymentGateway).pay(shoppingBasket);
+    }
+
     // send_an_email_when_the_payment_is_successful
 
     // returns_ok_when_everything_went_well
