@@ -22,7 +22,9 @@ public class SubmitPaymentShould {
 
     @Test
     public void works_when_everything_is_correct() throws EmptyShoppingCartException {
-        ShoppingBasket shoppingBasket = shoppingBasketWith(anItem());
+        Item item = anItem();
+        ShoppingBasket shoppingBasket = shoppingBasketWith(item);
+        when(stockValidator.hasStock(item)).thenReturn(true);
 
         submitPayment.execute(shoppingBasket);
     }
@@ -34,12 +36,12 @@ public class SubmitPaymentShould {
 
     @Test
     public void check_that_all_the_items_are_in_stock() throws EmptyShoppingCartException {
-        Item anItem = anItem();
-        ShoppingBasket shoppingBasket = shoppingBasketWith(anItem);
+        Item item = anItem();
+        ShoppingBasket shoppingBasket = shoppingBasketWith(item);
 
         submitPayment.execute(shoppingBasket);
 
-        verify(stockValidator).hasStock(anItem);
+        verify(stockValidator).hasStock(item);
     }
 
     // abort_payment_when_there_is_an_item_out_of_stock
