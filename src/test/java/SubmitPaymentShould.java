@@ -11,15 +11,16 @@ import static org.mockito.Mockito.when;
 public class SubmitPaymentShould {
 
     private StockValidator stockValidator;
+    private SubmitPayment submitPayment;
 
     @Before
     public void setUp(){
         stockValidator = mock(StockValidator.class);
+        submitPayment = new SubmitPayment(stockValidator);
     }
 
     @Test
     public void works_when_everything_is_correct() throws EmptyShoppingCartException {
-        SubmitPayment submitPayment = new SubmitPayment(stockValidator);
         ShoppingBasket shoppingBasket = mock(ShoppingBasket.class);
         when(shoppingBasket.items()).thenReturn(Collections.singletonList(new Item()));
 
@@ -28,7 +29,6 @@ public class SubmitPaymentShould {
 
     @Test(expected = EmptyShoppingCartException.class)
     public void avoid_make_a_payment_of_an_empty_shopping_basket() throws EmptyShoppingCartException {
-        SubmitPayment submitPayment = new SubmitPayment(stockValidator);
         ShoppingBasket shoppingBasket = mock(ShoppingBasket.class);
         when(shoppingBasket.items()).thenReturn(Collections.emptyList());
 
@@ -37,7 +37,6 @@ public class SubmitPaymentShould {
 
     @Test
     public void check_that_all_the_items_are_in_stock() throws EmptyShoppingCartException {
-        SubmitPayment submitPayment = new SubmitPayment(stockValidator);
         ShoppingBasket shoppingBasket = mock(ShoppingBasket.class);
         Item anItem = new Item();
         when(shoppingBasket.items()).thenReturn(Collections.singletonList(anItem));
