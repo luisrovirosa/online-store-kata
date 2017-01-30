@@ -43,12 +43,11 @@ public class SubmitPaymentShould {
         submitPayment.execute(shoppingBasket);
     }
 
-    // abort_payment_when_there_is_an_item_out_of_stock
-    // returns_ok_when_everything_went_well
-
-    // returns_fail_with_the_message_when_there_is_a_problem
-    // send_an_email_when_the_payment_is_successful
     // make_the_payment_against_the_payment_gateway
+    // send_an_email_when_the_payment_is_successful
+
+    // returns_ok_when_everything_went_well
+    // returns_fail_with_the_message_when_there_is_a_problem
 
     private ShoppingBasket emptyShoppingBasket() {
         return shoppingBasketWith();
