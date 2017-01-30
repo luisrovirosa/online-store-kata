@@ -61,9 +61,6 @@ public class SubmitPaymentShould {
         verify(mailer).sendConfirmationEmail(shoppingBasket);
     }
 
-    // returns_ok_when_everything_went_well
-    // returns_fail_with_the_message_when_there_is_a_problem
-
     private ShoppingBasket validShoppingBasket() {
         Item item = new Item();
         when(stockValidator.hasStock(item)).thenReturn(true);
