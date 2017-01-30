@@ -17,13 +17,16 @@ public class SubmitPayment {
     }
 
     private void assertHasItems(ShoppingBasket shoppingBasket) throws EmptyShoppingCartException {
-        if (shoppingBasket.items().size() == 0){
+        if (shoppingBasket.items().size() == 0) {
             throw new EmptyShoppingCartException();
         }
     }
 
     private void assertHasStock(ShoppingBasket shoppingBasket) throws OutOfStockException {
-        if (shoppingBasket.items().stream().filter((Item item) -> !stockValidator.hasStock(item)).count() > 0){
+        Stream<Item> outOfStockItems = shoppingBasket.items().stream().filter(
+                (Item item) -> !stockValidator.hasStock(item)
+        );
+        if (outOfStockItems.count() > 0) {
             throw new OutOfStockException();
         }
     }
