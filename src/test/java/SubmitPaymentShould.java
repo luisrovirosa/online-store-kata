@@ -22,7 +22,7 @@ public class SubmitPaymentShould {
 
     @Test
     public void works_when_everything_is_correct() throws EmptyShoppingCartException {
-        ShoppingBasket shoppingBasket = shoppingBasketWith(Collections.singletonList(anItem()));
+        ShoppingBasket shoppingBasket = shoppingBasketWith(anItem());
 
         submitPayment.execute(shoppingBasket);
     }
@@ -35,7 +35,7 @@ public class SubmitPaymentShould {
     @Test
     public void check_that_all_the_items_are_in_stock() throws EmptyShoppingCartException {
         Item anItem = anItem();
-        ShoppingBasket shoppingBasket = shoppingBasketWith(Collections.singletonList(anItem));
+        ShoppingBasket shoppingBasket = shoppingBasketWith(anItem);
 
         submitPayment.execute(shoppingBasket);
 
@@ -50,12 +50,12 @@ public class SubmitPaymentShould {
     // make_the_payment_against_the_payment_gateway
 
     private ShoppingBasket emptyShoppingBasket() {
-        return shoppingBasketWith(Collections.emptyList());
+        return shoppingBasketWith();
     }
 
-    private ShoppingBasket shoppingBasketWith(List<Item> t) {
+    private ShoppingBasket shoppingBasketWith(Item... items) {
         ShoppingBasket shoppingBasket = mock(ShoppingBasket.class);
-        when(shoppingBasket.items()).thenReturn(t);
+        when(shoppingBasket.items()).thenReturn(Arrays.asList(items));
         return shoppingBasket;
     }
 
